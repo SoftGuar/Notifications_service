@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id         Int        @id @default(autoincrement())
+  first_name String
+  last_name  String
+  email      String     @unique
+  password   String
+  phone      String?
+  add_by     Int
+  privilege  Int
+  SuperAdmin SuperAdmin @relation(fields: [add_by], references: [id], onDelete: Cascade)
+}
+
+model Commercial {
+  id          Int           @id @default(autoincrement())
+  first_name  String
+  last_name   String
+  email       String        @unique
+  password    String
+  phone       String?
+  Transaction Transaction[]
+}
+
+model Decider {
+  id         Int     @id @default(autoincrement())
+  first_name String
+  last_name  String
+  email      String  @unique
+  password   String
+  phone      String?
+}
+
+model DispoIssue {
+  id            Int         @id @default(autoincrement())
+  dispositiveId Int
+  description   String
+  date          DateTime    @default(now())
+  status        String      @default("pending")
+  maintainerId  Int?
+  Dispositive   Dispositive @relation(fields: [dispositiveId], references: [id])
+  Maintainer    Maintainer? @relation(fields: [maintainerId], references: [id])
+}
+
+model Dispositive {
+  id                 Int                  @id @default(autoincrement())
+  type               String
+  start_date         DateTime
+  end_date           DateTime
+  initial_state      String
+  MAC                String
+  state              String
+  user_id            Int?
+  product_id         Int
+  created_at         DateTime             @default(now())
+  updated_at         DateTime
+  DispotiveIssue     DispoIssue[]
+  Product            Product              @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  User               User?                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Intervention       Intervention[]
+  ProductTransaction ProductTransaction[]
+}
+
+model Helper {
+  id         Int     @id @default(autoincrement())
+  first_name String
+  last_name  String
+  email      String  @unique
+  password   String
+  phone      String?
+  User       User[]  @relation("UserHelpers")
+}
+
+model Intervention {
+  idMaintainer       Int
+  description        String
+  type               String
+  end_date           DateTime
+  start_date         DateTime            @default(now())
+  id                 Int                 @id @default(autoincrement())
+  status             InterventionStatus  @default(pending)
+  idDispositive      Int
+  Dispositive        Dispositive         @relation(fields: [idDispositive], references: [id])
+  Maintainer         Maintainer          @relation(fields: [idMaintainer], references: [id])
+  InterventionReport InterventionReport?
+}
+
+model Maintainer {
+  id           Int            @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  email        String         @unique
+  password     String
+  phone        String?
+  DispoIssue   DispoIssue[]
+  Intervention Intervention[]
+}
+
+model Product {
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String?
+  price            Float
+  created_at       DateTime           @default(now())
+  updated_at       DateTime
+  Dispositive      Dispositive[]
+  ProductQuotation ProductQuotation[]
+}
+
+model ProductQuotation {
+  quotation_id Int
+  product_id   Int
+  count        Int
+  created_at   DateTime  @default(now())
+  updated_at   DateTime
+  Product      Product   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  Quotation    Quotation @relation(fields: [quotation_id], references: [id], onDelete: Cascade)
+
+  @@id([quotation_id, product_id])
+}
+
+model ProductTransaction {
+  transaction_id Int
+  dispositive_id Int
+  isConfirmed    Boolean     @default(false)
+  created_at     DateTime    @default(now())
+  updated_at     DateTime
+  Dispositive    Dispositive @relation(fields: [dispositive_id], references: [id])
+  Transaction    Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+
+  @@id([transaction_id, dispositive_id])
+}
+
+model Quotation {
+  id               Int                @id @default(autoincrement())
+  user_id          Int
+  created_at       DateTime           @default(now())
+  updated_at       DateTime
+  ProductQuotation ProductQuotation[]
+  User             User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model SuperAdmin {
+  id         Int     @id @default(autoincrement())
+  first_name String
+  last_name  String
+  email      String  @unique
+  password   String
+  phone      String?
+  Admin      Admin[]
+}
+
+model Transaction {
+  id                 Int                  @id @default(autoincrement())
+  user_id            Int
+  commercial_id      Int
+  created_at         DateTime             @default(now())
+  updated_at         DateTime
+  ProductTransaction ProductTransaction[]
+  Commercial         Commercial           @relation(fields: [commercial_id], references: [id], onDelete: Cascade)
+  User               User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  first_name  String
+  last_name   String
+  password    String
+  phone       String?
+  created_at  DateTime      @default(now())
+  Dispositive Dispositive[]
+  Quotation   Quotation[]
+  Transaction Transaction[]
+  Helper      Helper[]      @relation("UserHelpers")
+  Notification Notification[]
+}
+
+model InterventionReport {
+  id             Int          @id @default(autoincrement())
+  interventionId Int          @unique
+  title          String
+  description    String
+  created_at     DateTime     @default(now())
+  Intervention   Intervention @relation(fields: [interventionId], references: [id], onDelete: Cascade)
+}
+
+enum InterventionStatus {
+  done
+  inProgress
+  pending
+  rescheduled
+}
+
+model Notification {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  type        String? 
+  channel     String? 
+  title       String
+  message     String
+  metadata    Json?   
+  is_read     Boolean   @default(false)
+  status      String    @default("pending") // e.g., "sent", "failed", "delivered"
+  created_at  DateTime  @default(now())
+  sent_at     DateTime?
+  read_at     DateTime?
+  User        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
