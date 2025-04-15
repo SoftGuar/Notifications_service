@@ -1,11 +1,14 @@
 
-import { sendNotification } from "../routes/websocketRoute";
+import { activeConnections } from "../routes/websocketRoute";
+import { WebSocketService } from "./WebsocketService";
 import { NotificationPayload } from "./types/payload";
+
 export const inAppChannelService={
     async sendNotification(notificationData:NotificationPayload ) {
         try {
-            sendNotification(
-                notificationData
+            WebSocketService.sendNotification(
+                notificationData,
+                activeConnections
                );
         } catch (error) {
             console.error("Error sending in-app notification:", error);

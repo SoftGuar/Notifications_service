@@ -1,45 +1,95 @@
-export class WebsocketService {
-    private socket: WebSocket | null = null;
-    private messageCallback: ((data: any) => void) | null = null;
+import { FastifyInstance } from "fastify";
+import { NotificationPayload } from "app/services/types/payload";
+import fastifyWebsocket from "@fastify/websocket";
+import { WebSocket } from "ws";
+interface ActiveConnection {
+    socket: WebSocket;
+    user_id?: number;
+    topics: string[];
+  }
 
-    constructor() {
-        this.connect();
-    }
-
-    private connect() {
-        this.socket = new WebSocket("ws://localhost:8080/ws");
-
-        this.socket.onopen = () => {
-            console.log("WebSocket connection established.");
-        };
-
-        this.socket.onmessage = (event) => {
-            if (this.messageCallback) {
-                const data = JSON.parse(event.data);
-                console.log("Received from server:", data);
-                this.messageCallback(data);
+export const WebSocketService={
+     WebSocketConnect: async(fastify: FastifyInstance, activeConnections: Map<string, ActiveConnection>)=> {
+        await fastify.register(fastifyWebsocket);
+        
+        fastify.get("/ws", { websocket: true }, (connection, req) => {
+            const connectionId = Math.random().toString(36).substring(2, 15);
+            console.log(`Client connected: ${connectionId}`);
+    
+            // In @fastify/websocket, the connection object itself is the socket
+            const connectionData: ActiveConnection = {
+                socket: connection, // The connection is the socket
+                user_id: undefined,
+                topics: []
+            };
+            activeConnections.set(connectionId, connectionData);
+    
+            connection.on("message", (message) => {
+                try {
+                    const parsed = JSON.parse(message.toString());
+                    console.log("Received:", parsed);
+    
+                    if (parsed.type === "subscribe") {
+                        // Update connection data
+                        connectionData.user_id = parsed.user_id;
+                        connectionData.topics = parsed.topics || [];
+                        
+                        connection.send(JSON.stringify({ 
+                            type: "subscribed", 
+                            topics: connectionData.topics,
+                            user_id: connectionData.user_id
+                        }));
+                    }
+                } catch (err) {
+                    console.error("Error processing message:", err);
+                }
+            });
+    
+            connection.on("close", () => {
+                console.log(`Client disconnected: ${connectionId}`);
+                activeConnections.delete(connectionId);
+            });
+    
+            // Send welcome message
+            connection.send(JSON.stringify({
+                type: "welcome",
+                message: "Connected to notification service",
+                timestamp: new Date().toISOString()
+            }));
+        });
+    },
+    sendNotification: (notification: NotificationPayload, activeConnections: Map<string, ActiveConnection>)=> {
+        const notificationMessage = JSON.stringify({
+            type: "notification",
+            data: {
+                ...notification,
+                timestamp: new Date().toISOString()
             }
-        };
-
-        this.socket.onclose = () => {
-            console.log("WebSocket connection closed. Reconnecting...");
-            setTimeout(() => this.connect(), 1000);
-        };
-
-        this.socket.onerror = (error) => {
-            console.error("WebSocket error:", error);
-        };
-    }
-
-    public sendMessage(message: string) {
-        if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-            this.socket.send(message);
-        } else {
-            console.error("WebSocket is not open. Unable to send message.");
-        }
-    }
-
-    public onMessage(callback: (data: any) => void) {
-        this.messageCallback = callback;
+        });
+    
+        activeConnections.forEach((connection, connectionId) => {
+            // Check if connection should receive this notification
+            const shouldReceive = 
+                // If no userId/topic specified, send to everyone
+                (!notification.recipient.userId && !notification.notificationType) ||
+                // Or if userId matches
+                (notification.recipient.userId && connection.user_id === notification.recipient.userId) ||
+                // Or if topic matches
+                (notification.notificationType && connection.topics.includes(notification.notificationType));
+                console.log(`Sending notification to ${connectionId}:`, notificationMessage);
+                connection.socket.send(notificationMessage);
+            if (shouldReceive && connection.socket.readyState === WebSocket.OPEN) {
+                try {
+                    console.log(`Sending notification to ${connectionId}:`, notificationMessage);
+                    connection.socket.send(notificationMessage);
+                } catch (err) {
+                    console.error("Failed to send notification:", err);
+                    activeConnections.delete(connectionId);
+                }
+            } else if (connection.socket.readyState !== WebSocket.OPEN) {
+                // Clean up closed connections
+                activeConnections.delete(connectionId);
+            }
+        });
     }
 }
