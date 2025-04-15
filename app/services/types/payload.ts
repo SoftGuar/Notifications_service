@@ -4,7 +4,7 @@ export interface NotificationPayload {
     notificationType: "transactional" | "promotional";
     channels: Array<"email" | "sms" | "push" | "in-app">;
     recipient: {
-        userId: string;
+        userId: number;
         email: string;
     };
     message: {

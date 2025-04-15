@@ -2,11 +2,11 @@ import prisma from '../services/prismaService';
 import { createNotificationInput } from 'app/services/types/Notifications.types';
 
 export const notificationsModel = {
-  async getNotifications(userId: string) {
+  async getNotifications(userId: number) {
     try {
       const notifications = await prisma.notification.findMany({
         where: {
-          userId: userId,
+          user_id: userId,
         },
       });
       return notifications;
@@ -19,7 +19,16 @@ export const notificationsModel = {
     async createNotification(notificationData: createNotificationInput) {
         try {
             const notification = await prisma.notification.create({
-            data: notificationData,
+            data: {
+                user_id: notificationData.user_id,
+                title: notificationData.title,
+                message: notificationData.message,
+                is_read: notificationData.read,
+                type: notificationData.type || null,
+                metadata: notificationData.metadata ?? undefined,
+                sent_at: notificationData.sentAt || new Date(),
+                read_at: notificationData.readAt || null,
+            }
             });
             return notification;
         } catch (error) {
@@ -28,7 +37,7 @@ export const notificationsModel = {
         }
         }
     ,
-    async updateNotification(notificationId: string, updateData: any) {
+    async updateNotification(notificationId: number, updateData: any) {
         try {
             const notification = await prisma.notification.update({
             where: { id: notificationId },
@@ -41,7 +50,7 @@ export const notificationsModel = {
         }
     }
     ,
-    async deleteNotification(notificationId: string) {
+    async deleteNotification(notificationId: number) {
         try {
             const notification = await prisma.notification.delete({
             where: { id: notificationId },
@@ -53,11 +62,11 @@ export const notificationsModel = {
         }
     }
     ,
-    async markNotificationAsRead(notificationId: string) {
+    async markNotificationAsRead(notificationId: number) {
         try {
             const notification = await prisma.notification.update({
             where: { id: notificationId },
-            data: { read: true },
+            data: { is_read: true },
             });
             return notification;
         } catch (error) {
@@ -66,11 +75,11 @@ export const notificationsModel = {
         }
     }
     ,
-    async markNotificationAsUnread(notificationId: string) {
+    async markNotificationAsUnread(notificationId: number) {
         try {
             const notification = await prisma.notification.update({
             where: { id: notificationId },
-            data: { read: false },
+            data: { is_read: false },
             });
             return notification;
         } catch (error) {
@@ -79,7 +88,7 @@ export const notificationsModel = {
         }
     }
     ,
-    async getNotificationById(notificationId: string) {
+    async getNotificationById(notificationId: number) {
         try {
             const notification = await prisma.notification.findUnique({
             where: { id: notificationId },
@@ -91,11 +100,11 @@ export const notificationsModel = {
         }
     }
     ,
-    async getNotificationsByType(userId: string, type: string) {
+    async getNotificationsByType(userId: number, type: string) {
         try {
             const notifications = await prisma.notification.findMany({
             where: {
-                userId: userId,
+                user_id: userId,
                 type: type,
             },
             });
@@ -105,20 +114,5 @@ export const notificationsModel = {
             throw new Error('Failed to fetch notifications by type');
         }
     }
-    ,
-    async getNotificationsByStatus(userId: string, status: string) {
-        try {
-            const notifications = await prisma.notification.findMany({
-            where: {
-                userId: userId,
-                status: status,
-            },
-            });
-            return notifications;
-        } catch (error) {
-            console.error('Error fetching notifications by status:', error);
-            throw new Error('Failed to fetch notifications by status');
-        }
-    },
     
 };

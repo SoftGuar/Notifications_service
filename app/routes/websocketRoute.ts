@@ -1,71 +1,97 @@
 import { FastifyInstance } from "fastify";
+import { NotificationPayload } from "app/services/types/payload";
 import fastifyWebsocket from "@fastify/websocket";
+import { WebSocket } from "ws";
 
-// Store active connections
-const activeConnections = new Map<string, WebSocket>();
+interface ActiveConnection {
+  socket: WebSocket;
+  user_id?: number;
+  topics: string[];
+}
+
+const activeConnections = new Map<string, ActiveConnection>();
 
 export default async function websocketRoute(fastify: FastifyInstance) {
-    fastify.register(fastifyWebsocket);
+    await fastify.register(fastifyWebsocket);
     
     fastify.get("/ws", { websocket: true }, (connection, req) => {
-        // Generate a unique ID for this connection (could use user ID if authenticated)
         const connectionId = Math.random().toString(36).substring(2, 15);
         console.log(`Client connected: ${connectionId}`);
 
-        // Store the connection
-        activeConnections.set(connectionId, connection.socket);
+        // In @fastify/websocket, the connection object itself is the socket
+        const connectionData: ActiveConnection = {
+            socket: connection, // The connection is the socket
+            user_id: undefined,
+            topics: []
+        };
+        activeConnections.set(connectionId, connectionData);
 
-        connection.socket.on("message", (message: string) => {
+        connection.on("message", (message) => {
             try {
                 const parsed = JSON.parse(message.toString());
                 console.log("Received:", parsed);
 
-                // Handle different message types
                 if (parsed.type === "subscribe") {
-                    // You could implement topic-based subscriptions here
-                    connection.socket.send(
-                        JSON.stringify({ 
-                            type: "subscribed", 
-                            topics: parsed.topics 
-                        })
-                    );
+                    // Update connection data
+                    connectionData.user_id = parsed.user_id;
+                    connectionData.topics = parsed.topics || [];
+                    
+                    connection.send(JSON.stringify({ 
+                        type: "subscribed", 
+                        topics: connectionData.topics,
+                        user_id: connectionData.user_id
+                    }));
                 }
             } catch (err) {
                 console.error("Error processing message:", err);
             }
         });
 
-        connection.socket.on("close", () => {
+        connection.on("close", () => {
             console.log(`Client disconnected: ${connectionId}`);
             activeConnections.delete(connectionId);
         });
+
+        // Send welcome message
+        connection.send(JSON.stringify({
+            type: "welcome",
+            message: "Connected to notification service",
+            timestamp: new Date().toISOString()
+        }));
     });
 }
 
-// Function to send notifications to all or specific clients
-export function sendNotification(notification: {
-    type: string;
-    title: string;
-    message: string;
-    userId?: string;
-    topic?: string;
-}) {
+export function sendNotification(notification: NotificationPayload) {
     const notificationMessage = JSON.stringify({
         type: "notification",
-        data: notification
+        data: {
+            ...notification,
+            timestamp: new Date().toISOString()
+        }
     });
 
-    // Send to all connections (or filter by userId/topic in a real implementation)
-    activeConnections.forEach((socket) => {
-        if (socket.readyState === socket.OPEN) {
-            socket.send(notificationMessage);
-        } else {
+    activeConnections.forEach((connection, connectionId) => {
+        // Check if connection should receive this notification
+        const shouldReceive = 
+            // If no userId/topic specified, send to everyone
+            (!notification.recipient.userId && !notification.notificationType) ||
+            // Or if userId matches
+            (notification.recipient.userId && connection.user_id === notification.recipient.userId) ||
+            // Or if topic matches
+            (notification.notificationType && connection.topics.includes(notification.notificationType));
+            console.log(`Sending notification to ${connectionId}:`, notificationMessage);
+            connection.socket.send(notificationMessage);
+        if (shouldReceive && connection.socket.readyState === WebSocket.OPEN) {
+            try {
+                console.log(`Sending notification to ${connectionId}:`, notificationMessage);
+                connection.socket.send(notificationMessage);
+            } catch (err) {
+                console.error("Failed to send notification:", err);
+                activeConnections.delete(connectionId);
+            }
+        } else if (connection.socket.readyState !== WebSocket.OPEN) {
             // Clean up closed connections
-            activeConnections.forEach((value, key) => {
-                if (value.readyState !== value.OPEN) {
-                    activeConnections.delete(key);
-                }
-            });
+            activeConnections.delete(connectionId);
         }
     });
 }

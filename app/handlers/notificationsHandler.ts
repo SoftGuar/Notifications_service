@@ -2,10 +2,10 @@ import {notificationsService} from '../services/notificationsService';
 import { FastifyInstance } from 'fastify';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import {NotificationPayload} from '../services/types/payload';
-import { inAppChannelService } from 'app/services/in-appChannelService';
+import { inAppChannelService } from '../services/inAppChannelService';
 
 export const notificationsHandler = {
-    async getNotifications(req: FastifyRequest<{ Params: { userId: string } }>, res: FastifyReply) {
+    async getNotifications(req: FastifyRequest<{ Params: { userId: number } }>, res: FastifyReply) {
         try {
             const userId = req.params.userId; // Assuming userId is passed as a URL parameter
             const notifications = await notificationsService.getNotifications(userId);
@@ -29,6 +29,7 @@ export const notificationsHandler = {
                         // Call push notification service to send push notification
                         break;
                     case 'in-app':
+                        console.log('Sending in-app notification:', notificationData);
                         await inAppChannelService.sendNotification(notificationData);
                         break;
                 }
@@ -40,7 +41,7 @@ export const notificationsHandler = {
         }
     },
     
-    async updateNotification(req: FastifyRequest<{ Params: { notificationId: string } }>, res: FastifyReply) {
+    async updateNotification(req: FastifyRequest<{ Params: { notificationId: number } }>, res: FastifyReply) {
         try {
             const notificationId = req.params.notificationId;
             const updateData = req.body;

@@ -3,7 +3,7 @@ import { createNotificationInput } from "./types/Notifications.types";
 import { NotificationPayload } from "./types/payload";
 
 export const notificationsService = {
-    async getNotifications(userId: string) {
+    async getNotifications(userId: number) {
         try {
         const notifications = await notificationsModel.getNotifications(userId);
         return notifications;
@@ -17,7 +17,7 @@ export const notificationsService = {
         try {
         //fill createNotificationInput with the data from notificationData
         const createNotificationInput :createNotificationInput = {
-            userId: notificationData.recipient.userId,
+            user_id: notificationData.recipient.userId,
             title: notificationData.message.pushNotification?.title || "New Notification",
             message: notificationData.message.pushNotification?.body || notificationData.message.body,
             read: false,
@@ -33,7 +33,7 @@ export const notificationsService = {
         }
     },
     
-    async updateNotification(notificationId: string, updateData: any) {
+    async updateNotification(notificationId: number, updateData: any) {
         try {
         const notification = await notificationsModel.updateNotification(notificationId, updateData);
         return notification;
@@ -43,7 +43,7 @@ export const notificationsService = {
         }
     },
     
-    async deleteNotification(notificationId: string) {
+    async deleteNotification(notificationId: number) {
         try {
         const notification = await notificationsModel.deleteNotification(notificationId);
         return notification;
@@ -53,7 +53,7 @@ export const notificationsService = {
         }
     },
     
-    async markNotificationAsRead(notificationId: string) {
+    async markNotificationAsRead(notificationId: number) {
         try {
         const notification = await notificationsModel.markNotificationAsRead(notificationId);
         return notification;
