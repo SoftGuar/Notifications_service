@@ -1,7 +1,5 @@
-import {PrismaClient} from '@prisma/client';
-
-const prisma = new PrismaClient();
-
+import prisma from '../services/prismaService';
+import { createNotificationInput } from 'app/services/types/Notifications.types';
 
 export const notificationsModel = {
   async getNotifications(userId: string) {
@@ -18,7 +16,7 @@ export const notificationsModel = {
     }
   }
     ,
-    async createNotification(notificationData: any) {
+    async createNotification(notificationData: createNotificationInput) {
         try {
             const notification = await prisma.notification.create({
             data: notificationData,

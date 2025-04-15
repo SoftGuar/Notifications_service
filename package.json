@@ -14,7 +14,7 @@
     "@fastify/swagger": "^9.4.2",
     "@fastify/swagger-ui": "^5.2.2",
     "@fastify/websocket": "^11.0.2",
-    "@prisma/client": "^6.5.0",
+    "@prisma/client": "^6.6.0",
     "@prisma/extension-accelerate": "^1.3.0",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
@@ -22,6 +22,7 @@
     "fastify-env": "^2.1.1",
     "fastify-plugin": "^5.0.1",
     "jest-mock-extended": "^4.0.0-beta1",
+    "notifications_service": "file:",
     "swagger": "^0.7.5"
   },
   "devDependencies": {

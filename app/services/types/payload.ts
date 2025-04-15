@@ -1,8 +1,8 @@
-interface NotificationPayload {
+export interface NotificationPayload {
     requestId: string;
     timestamp: string;
     notificationType: "transactional" | "promotional";
-    channels: Array<"email" | "sms" | "push">;
+    channels: Array<"email" | "sms" | "push" | "in-app">;
     recipient: {
         userId: string;
         email: string;

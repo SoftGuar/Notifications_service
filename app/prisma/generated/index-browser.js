@@ -18,11 +18,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 6.6.0
- * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
+ * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
  */
 Prisma.prismaVersion = {
   client: "6.6.0",
-  engine: "173f8d54f8d52e692c7e27e72a88314ec7aeff60"
+  engine: "f676762280b54cd07c770017ed3711ddde35f37a"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -269,12 +269,10 @@ exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   type: 'type',
-  channel: 'channel',
   title: 'title',
   message: 'message',
   metadata: 'metadata',
   is_read: 'is_read',
-  status: 'status',
   created_at: 'created_at',
   sent_at: 'sent_at',
   read_at: 'read_at'

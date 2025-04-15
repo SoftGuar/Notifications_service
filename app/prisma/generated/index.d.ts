@@ -471,7 +471,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 6.6.0
-   * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
+   * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
    */
   export type PrismaVersion = {
     client: string
@@ -2629,18 +2629,18 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     Dispositive: number
+    Notification: number
     Quotation: number
     Transaction: number
     Helper: number
-    Notification: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Dispositive?: boolean | UserCountOutputTypeCountDispositiveArgs
+    Notification?: boolean | UserCountOutputTypeCountNotificationArgs
     Quotation?: boolean | UserCountOutputTypeCountQuotationArgs
     Transaction?: boolean | UserCountOutputTypeCountTransactionArgs
     Helper?: boolean | UserCountOutputTypeCountHelperArgs
-    Notification?: boolean | UserCountOutputTypeCountNotificationArgs
   }
 
   // Custom InputTypes
@@ -2664,6 +2664,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountQuotationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuotationWhereInput
   }
@@ -2680,13 +2687,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountHelperArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: HelperWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NotificationWhereInput
   }
 
 
@@ -18799,10 +18799,10 @@ export namespace Prisma {
     phone?: boolean
     created_at?: boolean
     Dispositive?: boolean | User$DispositiveArgs<ExtArgs>
+    Notification?: boolean | User$NotificationArgs<ExtArgs>
     Quotation?: boolean | User$QuotationArgs<ExtArgs>
     Transaction?: boolean | User$TransactionArgs<ExtArgs>
     Helper?: boolean | User$HelperArgs<ExtArgs>
-    Notification?: boolean | User$NotificationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -18839,10 +18839,10 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "first_name" | "last_name" | "password" | "phone" | "created_at", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Dispositive?: boolean | User$DispositiveArgs<ExtArgs>
+    Notification?: boolean | User$NotificationArgs<ExtArgs>
     Quotation?: boolean | User$QuotationArgs<ExtArgs>
     Transaction?: boolean | User$TransactionArgs<ExtArgs>
     Helper?: boolean | User$HelperArgs<ExtArgs>
-    Notification?: boolean | User$NotificationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -18852,10 +18852,10 @@ export namespace Prisma {
     name: "User"
     objects: {
       Dispositive: Prisma.$DispositivePayload<ExtArgs>[]
+      Notification: Prisma.$NotificationPayload<ExtArgs>[]
       Quotation: Prisma.$QuotationPayload<ExtArgs>[]
       Transaction: Prisma.$TransactionPayload<ExtArgs>[]
       Helper: Prisma.$HelperPayload<ExtArgs>[]
-      Notification: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -19260,10 +19260,10 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Dispositive<T extends User$DispositiveArgs<ExtArgs> = {}>(args?: Subset<T, User$DispositiveArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DispositivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Notification<T extends User$NotificationArgs<ExtArgs> = {}>(args?: Subset<T, User$NotificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Quotation<T extends User$QuotationArgs<ExtArgs> = {}>(args?: Subset<T, User$QuotationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Transaction<T extends User$TransactionArgs<ExtArgs> = {}>(args?: Subset<T, User$TransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Helper<T extends User$HelperArgs<ExtArgs> = {}>(args?: Subset<T, User$HelperArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HelperPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Notification<T extends User$NotificationArgs<ExtArgs> = {}>(args?: Subset<T, User$NotificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19712,6 +19712,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.Notification
+   */
+  export type User$NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
    * User.Quotation
    */
   export type User$QuotationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19781,30 +19805,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: HelperScalarFieldEnum | HelperScalarFieldEnum[]
-  }
-
-  /**
-   * User.Notification
-   */
-  export type User$NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Notification
-     */
-    omit?: NotificationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    where?: NotificationWhereInput
-    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
-    cursor?: NotificationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -20948,11 +20948,9 @@ export namespace Prisma {
     id: number | null
     user_id: number | null
     type: string | null
-    channel: string | null
     title: string | null
     message: string | null
     is_read: boolean | null
-    status: string | null
     created_at: Date | null
     sent_at: Date | null
     read_at: Date | null
@@ -20962,11 +20960,9 @@ export namespace Prisma {
     id: number | null
     user_id: number | null
     type: string | null
-    channel: string | null
     title: string | null
     message: string | null
     is_read: boolean | null
-    status: string | null
     created_at: Date | null
     sent_at: Date | null
     read_at: Date | null
@@ -20976,12 +20972,10 @@ export namespace Prisma {
     id: number
     user_id: number
     type: number
-    channel: number
     title: number
     message: number
     metadata: number
     is_read: number
-    status: number
     created_at: number
     sent_at: number
     read_at: number
@@ -21003,11 +20997,9 @@ export namespace Prisma {
     id?: true
     user_id?: true
     type?: true
-    channel?: true
     title?: true
     message?: true
     is_read?: true
-    status?: true
     created_at?: true
     sent_at?: true
     read_at?: true
@@ -21017,11 +21009,9 @@ export namespace Prisma {
     id?: true
     user_id?: true
     type?: true
-    channel?: true
     title?: true
     message?: true
     is_read?: true
-    status?: true
     created_at?: true
     sent_at?: true
     read_at?: true
@@ -21031,12 +21021,10 @@ export namespace Prisma {
     id?: true
     user_id?: true
     type?: true
-    channel?: true
     title?: true
     message?: true
     metadata?: true
     is_read?: true
-    status?: true
     created_at?: true
     sent_at?: true
     read_at?: true
@@ -21133,12 +21121,10 @@ export namespace Prisma {
     id: number
     user_id: number
     type: string | null
-    channel: string | null
     title: string
     message: string
     metadata: JsonValue | null
     is_read: boolean
-    status: string
     created_at: Date
     sent_at: Date | null
     read_at: Date | null
@@ -21167,12 +21153,10 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
-    channel?: boolean
     title?: boolean
     message?: boolean
     metadata?: boolean
     is_read?: boolean
-    status?: boolean
     created_at?: boolean
     sent_at?: boolean
     read_at?: boolean
@@ -21183,12 +21167,10 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
-    channel?: boolean
     title?: boolean
     message?: boolean
     metadata?: boolean
     is_read?: boolean
-    status?: boolean
     created_at?: boolean
     sent_at?: boolean
     read_at?: boolean
@@ -21199,12 +21181,10 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
-    channel?: boolean
     title?: boolean
     message?: boolean
     metadata?: boolean
     is_read?: boolean
-    status?: boolean
     created_at?: boolean
     sent_at?: boolean
     read_at?: boolean
@@ -21215,18 +21195,16 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
-    channel?: boolean
     title?: boolean
     message?: boolean
     metadata?: boolean
     is_read?: boolean
-    status?: boolean
     created_at?: boolean
     sent_at?: boolean
     read_at?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "type" | "channel" | "title" | "message" | "metadata" | "is_read" | "status" | "created_at" | "sent_at" | "read_at", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "type" | "title" | "message" | "metadata" | "is_read" | "created_at" | "sent_at" | "read_at", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     User?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -21246,12 +21224,10 @@ export namespace Prisma {
       id: number
       user_id: number
       type: string | null
-      channel: string | null
       title: string
       message: string
       metadata: Prisma.JsonValue | null
       is_read: boolean
-      status: string
       created_at: Date
       sent_at: Date | null
       read_at: Date | null
@@ -21682,12 +21658,10 @@ export namespace Prisma {
     readonly id: FieldRef<"Notification", 'Int'>
     readonly user_id: FieldRef<"Notification", 'Int'>
     readonly type: FieldRef<"Notification", 'String'>
-    readonly channel: FieldRef<"Notification", 'String'>
     readonly title: FieldRef<"Notification", 'String'>
     readonly message: FieldRef<"Notification", 'String'>
     readonly metadata: FieldRef<"Notification", 'Json'>
     readonly is_read: FieldRef<"Notification", 'Boolean'>
-    readonly status: FieldRef<"Notification", 'String'>
     readonly created_at: FieldRef<"Notification", 'DateTime'>
     readonly sent_at: FieldRef<"Notification", 'DateTime'>
     readonly read_at: FieldRef<"Notification", 'DateTime'>
@@ -22319,12 +22293,10 @@ export namespace Prisma {
     id: 'id',
     user_id: 'user_id',
     type: 'type',
-    channel: 'channel',
     title: 'title',
     message: 'message',
     metadata: 'metadata',
     is_read: 'is_read',
-    status: 'status',
     created_at: 'created_at',
     sent_at: 'sent_at',
     read_at: 'read_at'
@@ -23414,10 +23386,10 @@ export namespace Prisma {
     phone?: StringNullableFilter<"User"> | string | null
     created_at?: DateTimeFilter<"User"> | Date | string
     Dispositive?: DispositiveListRelationFilter
+    Notification?: NotificationListRelationFilter
     Quotation?: QuotationListRelationFilter
     Transaction?: TransactionListRelationFilter
     Helper?: HelperListRelationFilter
-    Notification?: NotificationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -23429,10 +23401,10 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     created_at?: SortOrder
     Dispositive?: DispositiveOrderByRelationAggregateInput
+    Notification?: NotificationOrderByRelationAggregateInput
     Quotation?: QuotationOrderByRelationAggregateInput
     Transaction?: TransactionOrderByRelationAggregateInput
     Helper?: HelperOrderByRelationAggregateInput
-    Notification?: NotificationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -23447,10 +23419,10 @@ export namespace Prisma {
     phone?: StringNullableFilter<"User"> | string | null
     created_at?: DateTimeFilter<"User"> | Date | string
     Dispositive?: DispositiveListRelationFilter
+    Notification?: NotificationListRelationFilter
     Quotation?: QuotationListRelationFilter
     Transaction?: TransactionListRelationFilter
     Helper?: HelperListRelationFilter
-    Notification?: NotificationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -23545,12 +23517,10 @@ export namespace Prisma {
     id?: IntFilter<"Notification"> | number
     user_id?: IntFilter<"Notification"> | number
     type?: StringNullableFilter<"Notification"> | string | null
-    channel?: StringNullableFilter<"Notification"> | string | null
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     metadata?: JsonNullableFilter<"Notification">
     is_read?: BoolFilter<"Notification"> | boolean
-    status?: StringFilter<"Notification"> | string
     created_at?: DateTimeFilter<"Notification"> | Date | string
     sent_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
     read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
@@ -23561,12 +23531,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrderInput | SortOrder
-    channel?: SortOrderInput | SortOrder
     title?: SortOrder
     message?: SortOrder
     metadata?: SortOrderInput | SortOrder
     is_read?: SortOrder
-    status?: SortOrder
     created_at?: SortOrder
     sent_at?: SortOrderInput | SortOrder
     read_at?: SortOrderInput | SortOrder
@@ -23580,12 +23548,10 @@ export namespace Prisma {
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     user_id?: IntFilter<"Notification"> | number
     type?: StringNullableFilter<"Notification"> | string | null
-    channel?: StringNullableFilter<"Notification"> | string | null
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     metadata?: JsonNullableFilter<"Notification">
     is_read?: BoolFilter<"Notification"> | boolean
-    status?: StringFilter<"Notification"> | string
     created_at?: DateTimeFilter<"Notification"> | Date | string
     sent_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
     read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
@@ -23596,12 +23562,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrderInput | SortOrder
-    channel?: SortOrderInput | SortOrder
     title?: SortOrder
     message?: SortOrder
     metadata?: SortOrderInput | SortOrder
     is_read?: SortOrder
-    status?: SortOrder
     created_at?: SortOrder
     sent_at?: SortOrderInput | SortOrder
     read_at?: SortOrderInput | SortOrder
@@ -23619,12 +23583,10 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Notification"> | number
     user_id?: IntWithAggregatesFilter<"Notification"> | number
     type?: StringNullableWithAggregatesFilter<"Notification"> | string | null
-    channel?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     title?: StringWithAggregatesFilter<"Notification"> | string
     message?: StringWithAggregatesFilter<"Notification"> | string
     metadata?: JsonNullableWithAggregatesFilter<"Notification">
     is_read?: BoolWithAggregatesFilter<"Notification"> | boolean
-    status?: StringWithAggregatesFilter<"Notification"> | string
     created_at?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
     sent_at?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
     read_at?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
@@ -24550,10 +24512,10 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveCreateNestedManyWithoutUserInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
     Quotation?: QuotationCreateNestedManyWithoutUserInput
     Transaction?: TransactionCreateNestedManyWithoutUserInput
     Helper?: HelperCreateNestedManyWithoutUserInput
-    Notification?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -24565,10 +24527,10 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveUncheckedCreateNestedManyWithoutUserInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Quotation?: QuotationUncheckedCreateNestedManyWithoutUserInput
     Transaction?: TransactionUncheckedCreateNestedManyWithoutUserInput
     Helper?: HelperUncheckedCreateNestedManyWithoutUserInput
-    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -24579,10 +24541,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUpdateManyWithoutUserNestedInput
     Helper?: HelperUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -24594,10 +24556,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUncheckedUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUncheckedUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     Helper?: HelperUncheckedUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -24683,12 +24645,10 @@ export namespace Prisma {
 
   export type NotificationCreateInput = {
     type?: string | null
-    channel?: string | null
     title: string
     message: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: boolean
-    status?: string
     created_at?: Date | string
     sent_at?: Date | string | null
     read_at?: Date | string | null
@@ -24699,12 +24659,10 @@ export namespace Prisma {
     id?: number
     user_id: number
     type?: string | null
-    channel?: string | null
     title: string
     message: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: boolean
-    status?: string
     created_at?: Date | string
     sent_at?: Date | string | null
     read_at?: Date | string | null
@@ -24712,12 +24670,10 @@ export namespace Prisma {
 
   export type NotificationUpdateInput = {
     type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24728,12 +24684,10 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: IntFieldUpdateOperationsInput | number
     type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24743,12 +24697,10 @@ export namespace Prisma {
     id?: number
     user_id: number
     type?: string | null
-    channel?: string | null
     title: string
     message: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: boolean
-    status?: string
     created_at?: Date | string
     sent_at?: Date | string | null
     read_at?: Date | string | null
@@ -24756,12 +24708,10 @@ export namespace Prisma {
 
   export type NotificationUpdateManyMutationInput = {
     type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24771,12 +24721,10 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: IntFieldUpdateOperationsInput | number
     type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25666,6 +25614,12 @@ export namespace Prisma {
     commercial_id?: SortOrder
   }
 
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type QuotationListRelationFilter = {
     every?: QuotationWhereInput
     some?: QuotationWhereInput
@@ -25678,10 +25632,8 @@ export namespace Prisma {
     none?: HelperWhereInput
   }
 
-  export type NotificationListRelationFilter = {
-    every?: NotificationWhereInput
-    some?: NotificationWhereInput
-    none?: NotificationWhereInput
+  export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type QuotationOrderByRelationAggregateInput = {
@@ -25689,10 +25641,6 @@ export namespace Prisma {
   }
 
   export type HelperOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25811,12 +25759,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
-    channel?: SortOrder
     title?: SortOrder
     message?: SortOrder
     metadata?: SortOrder
     is_read?: SortOrder
-    status?: SortOrder
     created_at?: SortOrder
     sent_at?: SortOrder
     read_at?: SortOrder
@@ -25831,11 +25777,9 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
-    channel?: SortOrder
     title?: SortOrder
     message?: SortOrder
     is_read?: SortOrder
-    status?: SortOrder
     created_at?: SortOrder
     sent_at?: SortOrder
     read_at?: SortOrder
@@ -25845,11 +25789,9 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
-    channel?: SortOrder
     title?: SortOrder
     message?: SortOrder
     is_read?: SortOrder
-    status?: SortOrder
     created_at?: SortOrder
     sent_at?: SortOrder
     read_at?: SortOrder
@@ -26683,6 +26625,13 @@ export namespace Prisma {
     connect?: DispositiveWhereUniqueInput | DispositiveWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type QuotationCreateNestedManyWithoutUserInput = {
     create?: XOR<QuotationCreateWithoutUserInput, QuotationUncheckedCreateWithoutUserInput> | QuotationCreateWithoutUserInput[] | QuotationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: QuotationCreateOrConnectWithoutUserInput | QuotationCreateOrConnectWithoutUserInput[]
@@ -26703,18 +26652,18 @@ export namespace Prisma {
     connect?: HelperWhereUniqueInput | HelperWhereUniqueInput[]
   }
 
-  export type NotificationCreateNestedManyWithoutUserInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-  }
-
   export type DispositiveUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<DispositiveCreateWithoutUserInput, DispositiveUncheckedCreateWithoutUserInput> | DispositiveCreateWithoutUserInput[] | DispositiveUncheckedCreateWithoutUserInput[]
     connectOrCreate?: DispositiveCreateOrConnectWithoutUserInput | DispositiveCreateOrConnectWithoutUserInput[]
     createMany?: DispositiveCreateManyUserInputEnvelope
     connect?: DispositiveWhereUniqueInput | DispositiveWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type QuotationUncheckedCreateNestedManyWithoutUserInput = {
@@ -26737,13 +26686,6 @@ export namespace Prisma {
     connect?: HelperWhereUniqueInput | HelperWhereUniqueInput[]
   }
 
-  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-  }
-
   export type DispositiveUpdateManyWithoutUserNestedInput = {
     create?: XOR<DispositiveCreateWithoutUserInput, DispositiveUncheckedCreateWithoutUserInput> | DispositiveCreateWithoutUserInput[] | DispositiveUncheckedCreateWithoutUserInput[]
     connectOrCreate?: DispositiveCreateOrConnectWithoutUserInput | DispositiveCreateOrConnectWithoutUserInput[]
@@ -26756,6 +26698,20 @@ export namespace Prisma {
     update?: DispositiveUpdateWithWhereUniqueWithoutUserInput | DispositiveUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: DispositiveUpdateManyWithWhereWithoutUserInput | DispositiveUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: DispositiveScalarWhereInput | DispositiveScalarWhereInput[]
+  }
+
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type QuotationUpdateManyWithoutUserNestedInput = {
@@ -26799,20 +26755,6 @@ export namespace Prisma {
     deleteMany?: HelperScalarWhereInput | HelperScalarWhereInput[]
   }
 
-  export type NotificationUpdateManyWithoutUserNestedInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-  }
-
   export type DispositiveUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<DispositiveCreateWithoutUserInput, DispositiveUncheckedCreateWithoutUserInput> | DispositiveCreateWithoutUserInput[] | DispositiveUncheckedCreateWithoutUserInput[]
     connectOrCreate?: DispositiveCreateOrConnectWithoutUserInput | DispositiveCreateOrConnectWithoutUserInput[]
@@ -26825,6 +26767,20 @@ export namespace Prisma {
     update?: DispositiveUpdateWithWhereUniqueWithoutUserInput | DispositiveUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: DispositiveUpdateManyWithWhereWithoutUserInput | DispositiveUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: DispositiveScalarWhereInput | DispositiveScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type QuotationUncheckedUpdateManyWithoutUserNestedInput = {
@@ -26866,20 +26822,6 @@ export namespace Prisma {
     update?: HelperUpdateWithWhereUniqueWithoutUserInput | HelperUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: HelperUpdateManyWithWhereWithoutUserInput | HelperUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: HelperScalarWhereInput | HelperScalarWhereInput[]
-  }
-
-  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type InterventionCreateNestedOneWithoutInterventionReportInput = {
@@ -27461,10 +27403,10 @@ export namespace Prisma {
     password: string
     phone?: string | null
     created_at?: Date | string
+    Notification?: NotificationCreateNestedManyWithoutUserInput
     Quotation?: QuotationCreateNestedManyWithoutUserInput
     Transaction?: TransactionCreateNestedManyWithoutUserInput
     Helper?: HelperCreateNestedManyWithoutUserInput
-    Notification?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDispositiveInput = {
@@ -27475,10 +27417,10 @@ export namespace Prisma {
     password: string
     phone?: string | null
     created_at?: Date | string
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Quotation?: QuotationUncheckedCreateNestedManyWithoutUserInput
     Transaction?: TransactionUncheckedCreateNestedManyWithoutUserInput
     Helper?: HelperUncheckedCreateNestedManyWithoutUserInput
-    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDispositiveInput = {
@@ -27617,10 +27559,10 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUpdateManyWithoutUserNestedInput
     Helper?: HelperUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDispositiveInput = {
@@ -27631,10 +27573,10 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUncheckedUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     Helper?: HelperUncheckedUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InterventionUpsertWithWhereUniqueWithoutDispositiveInput = {
@@ -27702,9 +27644,9 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveCreateNestedManyWithoutUserInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
     Quotation?: QuotationCreateNestedManyWithoutUserInput
     Transaction?: TransactionCreateNestedManyWithoutUserInput
-    Notification?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHelperInput = {
@@ -27716,9 +27658,9 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveUncheckedCreateNestedManyWithoutUserInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Quotation?: QuotationUncheckedCreateNestedManyWithoutUserInput
     Transaction?: TransactionUncheckedCreateNestedManyWithoutUserInput
-    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHelperInput = {
@@ -28394,9 +28336,9 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveCreateNestedManyWithoutUserInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
     Transaction?: TransactionCreateNestedManyWithoutUserInput
     Helper?: HelperCreateNestedManyWithoutUserInput
-    Notification?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuotationInput = {
@@ -28408,9 +28350,9 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveUncheckedCreateNestedManyWithoutUserInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Transaction?: TransactionUncheckedCreateNestedManyWithoutUserInput
     Helper?: HelperUncheckedCreateNestedManyWithoutUserInput
-    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuotationInput = {
@@ -28453,9 +28395,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUpdateManyWithoutUserNestedInput
     Helper?: HelperUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuotationInput = {
@@ -28467,9 +28409,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUncheckedUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     Helper?: HelperUncheckedUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AdminCreateWithoutSuperAdminInput = {
@@ -28585,9 +28527,9 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveCreateNestedManyWithoutUserInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
     Quotation?: QuotationCreateNestedManyWithoutUserInput
     Helper?: HelperCreateNestedManyWithoutUserInput
-    Notification?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionInput = {
@@ -28599,9 +28541,9 @@ export namespace Prisma {
     phone?: string | null
     created_at?: Date | string
     Dispositive?: DispositiveUncheckedCreateNestedManyWithoutUserInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Quotation?: QuotationUncheckedCreateNestedManyWithoutUserInput
     Helper?: HelperUncheckedCreateNestedManyWithoutUserInput
-    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionInput = {
@@ -28672,9 +28614,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUpdateManyWithoutUserNestedInput
     Helper?: HelperUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionInput = {
@@ -28686,9 +28628,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUncheckedUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUncheckedUpdateManyWithoutUserNestedInput
     Helper?: HelperUncheckedUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DispositiveCreateWithoutUserInput = {
@@ -28729,6 +28671,39 @@ export namespace Prisma {
 
   export type DispositiveCreateManyUserInputEnvelope = {
     data: DispositiveCreateManyUserInput | DispositiveCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationCreateWithoutUserInput = {
+    type?: string | null
+    title: string
+    message: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    is_read?: boolean
+    created_at?: Date | string
+    sent_at?: Date | string | null
+    read_at?: Date | string | null
+  }
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: number
+    type?: string | null
+    title: string
+    message: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    is_read?: boolean
+    created_at?: Date | string
+    sent_at?: Date | string | null
+    read_at?: Date | string | null
+  }
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -28802,43 +28777,6 @@ export namespace Prisma {
     create: XOR<HelperCreateWithoutUserInput, HelperUncheckedCreateWithoutUserInput>
   }
 
-  export type NotificationCreateWithoutUserInput = {
-    type?: string | null
-    channel?: string | null
-    title: string
-    message: string
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    is_read?: boolean
-    status?: string
-    created_at?: Date | string
-    sent_at?: Date | string | null
-    read_at?: Date | string | null
-  }
-
-  export type NotificationUncheckedCreateWithoutUserInput = {
-    id?: number
-    type?: string | null
-    channel?: string | null
-    title: string
-    message: string
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    is_read?: boolean
-    status?: string
-    created_at?: Date | string
-    sent_at?: Date | string | null
-    read_at?: Date | string | null
-  }
-
-  export type NotificationCreateOrConnectWithoutUserInput = {
-    where: NotificationWhereUniqueInput
-    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
-  }
-
-  export type NotificationCreateManyUserInputEnvelope = {
-    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DispositiveUpsertWithWhereUniqueWithoutUserInput = {
     where: DispositiveWhereUniqueInput
     update: XOR<DispositiveUpdateWithoutUserInput, DispositiveUncheckedUpdateWithoutUserInput>
@@ -28853,6 +28791,38 @@ export namespace Prisma {
   export type DispositiveUpdateManyWithWhereWithoutUserInput = {
     where: DispositiveScalarWhereInput
     data: XOR<DispositiveUpdateManyMutationInput, DispositiveUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: IntFilter<"Notification"> | number
+    user_id?: IntFilter<"Notification"> | number
+    type?: StringNullableFilter<"Notification"> | string | null
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    metadata?: JsonNullableFilter<"Notification">
+    is_read?: BoolFilter<"Notification"> | boolean
+    created_at?: DateTimeFilter<"Notification"> | Date | string
+    sent_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
   }
 
   export type QuotationUpsertWithWhereUniqueWithoutUserInput = {
@@ -28923,40 +28893,6 @@ export namespace Prisma {
     email?: StringFilter<"Helper"> | string
     password?: StringFilter<"Helper"> | string
     phone?: StringNullableFilter<"Helper"> | string | null
-  }
-
-  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
-    where: NotificationWhereUniqueInput
-    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
-    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
-  }
-
-  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
-    where: NotificationWhereUniqueInput
-    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
-  }
-
-  export type NotificationUpdateManyWithWhereWithoutUserInput = {
-    where: NotificationScalarWhereInput
-    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type NotificationScalarWhereInput = {
-    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-    OR?: NotificationScalarWhereInput[]
-    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-    id?: IntFilter<"Notification"> | number
-    user_id?: IntFilter<"Notification"> | number
-    type?: StringNullableFilter<"Notification"> | string | null
-    channel?: StringNullableFilter<"Notification"> | string | null
-    title?: StringFilter<"Notification"> | string
-    message?: StringFilter<"Notification"> | string
-    metadata?: JsonNullableFilter<"Notification">
-    is_read?: BoolFilter<"Notification"> | boolean
-    status?: StringFilter<"Notification"> | string
-    created_at?: DateTimeFilter<"Notification"> | Date | string
-    sent_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
-    read_at?: DateTimeNullableFilter<"Notification"> | Date | string | null
   }
 
   export type InterventionCreateWithoutInterventionReportInput = {
@@ -29224,9 +29160,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHelperInput = {
@@ -29238,9 +29174,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Dispositive?: DispositiveUncheckedUpdateManyWithoutUserNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Quotation?: QuotationUncheckedUpdateManyWithoutUserNestedInput
     Transaction?: TransactionUncheckedUpdateManyWithoutUserNestedInput
-    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutHelperInput = {
@@ -29518,6 +29454,18 @@ export namespace Prisma {
     updated_at: Date | string
   }
 
+  export type NotificationCreateManyUserInput = {
+    id?: number
+    type?: string | null
+    title: string
+    message: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    is_read?: boolean
+    created_at?: Date | string
+    sent_at?: Date | string | null
+    read_at?: Date | string | null
+  }
+
   export type QuotationCreateManyUserInput = {
     id?: number
     created_at?: Date | string
@@ -29529,20 +29477,6 @@ export namespace Prisma {
     commercial_id: number
     created_at?: Date | string
     updated_at: Date | string
-  }
-
-  export type NotificationCreateManyUserInput = {
-    id?: number
-    type?: string | null
-    channel?: string | null
-    title: string
-    message: string
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    is_read?: boolean
-    status?: string
-    created_at?: Date | string
-    sent_at?: Date | string | null
-    read_at?: Date | string | null
   }
 
   export type DispositiveUpdateWithoutUserInput = {
@@ -29587,6 +29521,41 @@ export namespace Prisma {
     product_id?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutUserInput = {
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    is_read?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type QuotationUpdateWithoutUserInput = {
@@ -29654,47 +29623,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type NotificationUpdateWithoutUserInput = {
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type NotificationUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type NotificationUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    is_read?: BoolFieldUpdateOperationsInput | boolean
-    status?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    read_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

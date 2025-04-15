@@ -1,6 +1,8 @@
 import { notificationsModel } from "../models/notificationsModel";
+import { createNotificationInput } from "./types/Notifications.types";
+import { NotificationPayload } from "./types/payload";
 
-const notificationsService = {
+export const notificationsService = {
     async getNotifications(userId: string) {
         try {
         const notifications = await notificationsModel.getNotifications(userId);
@@ -11,9 +13,19 @@ const notificationsService = {
         }
     },
     
-    async createNotification(notificationData: any) {
+    async createNotification(notificationData: NotificationPayload) {
         try {
-        const notification = await notificationsModel.createNotification(notificationData);
+        //fill createNotificationInput with the data from notificationData
+        const createNotificationInput :createNotificationInput = {
+            userId: notificationData.recipient.userId,
+            title: notificationData.message.pushNotification?.title || "New Notification",
+            message: notificationData.message.pushNotification?.body || notificationData.message.body,
+            read: false,
+            type: notificationData.notificationType, 
+            metadata: notificationData.metadata,
+            sentAt: new Date(),
+        };
+        const notification = await notificationsModel.createNotification(createNotificationInput);
         return notification;
         } catch (error) {
         console.error('Error creating notification:', error);
