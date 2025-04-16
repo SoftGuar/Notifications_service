@@ -21,6 +21,8 @@
     "fastify-cors": "^6.0.3",
     "fastify-env": "^2.1.1",
     "fastify-plugin": "^5.0.1",
+    "firebase": "^11.6.0",
+    "firebase-admin": "^13.2.0",
     "jest-mock-extended": "^4.0.0-beta1",
     "notifications_service": "file:",
     "swagger": "^0.7.5",

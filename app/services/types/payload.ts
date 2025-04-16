@@ -3,10 +3,11 @@ export interface NotificationPayload {
     timestamp: string;
     notificationType: "transactional" | "promotional";
     channels: Array<"email" | "sms" | "push" | "in-app">;
-    recipient: {
+    broadcast: boolean;
+    recipient: Array<{
         userId: number;
         email: string;
-    };
+    }>;
     message: {
         subject: string;
         body: string;

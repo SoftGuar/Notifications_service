@@ -19,9 +19,9 @@ export const WebSocketService={
             // Check if connection should receive this notification
             const shouldReceive = 
                 // If no userId/topic specified, send to everyone
-                (!notification.recipient.userId && !notification.notificationType) ||
+                (!notification.recipient[0]?.userId && !notification.notificationType) ||
                 // Or if userId matches
-                (notification.recipient.userId && connection.user_id === notification.recipient.userId) ||
+                (notification.recipient[0]?.userId && connection.user_id === notification.recipient[0]?.userId) ||
                 // Or if topic matches
                 (notification.notificationType && connection.topics.includes(notification.notificationType));
                 console.log(`Sending notification to ${connectionId}:`, notificationMessage);

@@ -3,6 +3,7 @@ import { FastifyInstance } from 'fastify';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import {NotificationPayload} from '../services/types/payload';
 import { inAppChannelService } from '../services/inAppChannelService';
+import { sendNotification } from 'app/services/pushChannelService';
 
 export const notificationsHandler = {
     async getNotifications(req: FastifyRequest<{ Params: { userId: number } }>, res: FastifyReply) {
@@ -26,7 +27,8 @@ export const notificationsHandler = {
                         // Call email service to send email
                         break;
                     case 'push':
-                        // Call push notification service to send push notification
+                        console.log('Sending push notification:', notificationData);
+                        await sendNotification(notificationData);
                         break;
                     case 'in-app':
                         console.log('Sending in-app notification:', notificationData);

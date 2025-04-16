@@ -17,7 +17,7 @@ export const notificationsService = {
         try {
         //fill createNotificationInput with the data from notificationData
         const createNotificationInput :createNotificationInput = {
-            user_id: notificationData.recipient.userId,
+            user_id: notificationData.recipient[0]?.userId,
             title: notificationData.message.pushNotification?.title || "New Notification",
             message: notificationData.message.pushNotification?.body || notificationData.message.body,
             read: false,
