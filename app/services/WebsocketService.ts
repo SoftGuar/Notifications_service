@@ -1,6 +1,4 @@
-import { FastifyInstance } from "fastify";
 import { NotificationPayload } from "app/services/types/payload";
-import fastifyWebsocket from "@fastify/websocket";
 import { WebSocket } from "ws";
 interface ActiveConnection {
     socket: WebSocket;
@@ -9,62 +7,12 @@ interface ActiveConnection {
   }
 
 export const WebSocketService={
-     WebSocketConnect: async(fastify: FastifyInstance, activeConnections: Map<string, ActiveConnection>)=> {
-        await fastify.register(fastifyWebsocket);
-        
-        fastify.get("/ws", { websocket: true }, (connection, req) => {
-            const connectionId = Math.random().toString(36).substring(2, 15);
-            console.log(`Client connected: ${connectionId}`);
-    
-            // In @fastify/websocket, the connection object itself is the socket
-            const connectionData: ActiveConnection = {
-                socket: connection, // The connection is the socket
-                user_id: undefined,
-                topics: []
-            };
-            activeConnections.set(connectionId, connectionData);
-    
-            connection.on("message", (message) => {
-                try {
-                    const parsed = JSON.parse(message.toString());
-                    console.log("Received:", parsed);
-    
-                    if (parsed.type === "subscribe") {
-                        // Update connection data
-                        connectionData.user_id = parsed.user_id;
-                        connectionData.topics = parsed.topics || [];
-                        
-                        connection.send(JSON.stringify({ 
-                            type: "subscribed", 
-                            topics: connectionData.topics,
-                            user_id: connectionData.user_id
-                        }));
-                    }
-                } catch (err) {
-                    console.error("Error processing message:", err);
-                }
-            });
-    
-            connection.on("close", () => {
-                console.log(`Client disconnected: ${connectionId}`);
-                activeConnections.delete(connectionId);
-            });
-    
-            // Send welcome message
-            connection.send(JSON.stringify({
-                type: "welcome",
-                message: "Connected to notification service",
-                timestamp: new Date().toISOString()
-            }));
-        });
-    },
+
     sendNotification: (notification: NotificationPayload, activeConnections: Map<string, ActiveConnection>)=> {
         const notificationMessage = JSON.stringify({
             type: "notification",
-            data: {
-                ...notification,
-                timestamp: new Date().toISOString()
-            }
+            data: notification,
+            timestamp: new Date().toISOString()
         });
     
         activeConnections.forEach((connection, connectionId) => {

@@ -1,0 +1,56 @@
+import { FastifyRequest, FastifyReply } from "fastify"
+import fastifyWebsocket from "@fastify/websocket";
+import { WebSocket } from "ws";
+interface ActiveConnection {
+    socket: WebSocket;
+    user_id?: number;
+    topics: string[];
+  }
+export const activeConnections = new Map<string, ActiveConnection>();
+
+export const websocketRouteHandler=(
+    req: FastifyRequest<{ Params: { user_id: string } }>,
+    connection: WebSocket
+)=>{
+    const connectionId = Math.random().toString(36).substring(2, 15);
+            console.log(`Client connected: ${connectionId}`);
+            console.log(req.params.user_id)
+            const connectionData: ActiveConnection = {
+                socket: connection,
+                user_id: Number(req.params.user_id),
+                topics: []
+            };
+            activeConnections.set(connectionId, connectionData);
+    
+            connection.on("message", (message) => {
+                try {
+                    const parsed = JSON.parse(message.toString());
+                    console.log("Received:", parsed);
+    
+                    if (parsed.type === "subscribe") {
+                        connectionData.user_id = parsed.user_id;
+                        connectionData.topics = parsed.topics || [];
+                        
+                        connection.send(JSON.stringify({ 
+                            type: "subscribed", 
+                            topics: connectionData.topics,
+                            user_id: connectionData.user_id
+                        }));
+                    }
+                } catch (err) {
+                    console.error("Error processing message:", err);
+                }
+            });
+    
+            connection.on("close", () => {
+                console.log(`Client disconnected: ${connectionId}`);
+                activeConnections.delete(connectionId);
+            });
+    
+            // Send welcome message
+            connection.send(JSON.stringify({
+                type: "welcome",
+                message: "Connected to notification service",
+                timestamp: new Date().toISOString()
+            }));
+        }

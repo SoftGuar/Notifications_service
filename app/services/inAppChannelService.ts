@@ -1,5 +1,5 @@
 
-import { activeConnections } from "../routes/websocketRoute";
+import { activeConnections } from "../handlers/websocketRouteHandler";
 import { WebSocketService } from "./WebsocketService";
 import { NotificationPayload } from "./types/payload";
 
