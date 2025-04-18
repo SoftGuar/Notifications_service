@@ -4,6 +4,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import {NotificationPayload} from '../services/types/payload';
 import { inAppChannelService } from '../services/inAppChannelService';
 import { sendNotification } from 'app/services/pushChannelService';
+import { emailNotificationsService } from '../services/emailNotificationsService';
 
 export const notificationsHandler = {
     async getNotifications(req: FastifyRequest<{ Params: { userId: number } }>, res: FastifyReply) {
@@ -24,7 +25,7 @@ export const notificationsHandler = {
             for (const channel of notificationData.channels) {
                 switch (channel) {
                     case 'email':
-                        // Call email service to send email
+                        await emailNotificationsService.sendEmail(notificationData);
                         break;
                     case 'push':
                         console.log('Sending push notification:', notificationData);
