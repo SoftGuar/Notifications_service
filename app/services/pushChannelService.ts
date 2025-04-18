@@ -1,12 +1,10 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { NotificationPayload } from "./types/payload";
 
 const fastify = require('fastify')({ logger: true });
 const admin = require('firebase-admin');
 require('dotenv').config();
-
 // Initialize Firebase Admin SDK
-const serviceAccount = require('./serviceAccountKey.json');
+import serviceAccount from './serviceAccountKey.json';
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: process.env.FIREBASE_DATABASE_URL

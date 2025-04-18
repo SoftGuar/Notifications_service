@@ -1,5 +1,4 @@
 import { FastifyRequest, FastifyReply } from "fastify"
-import fastifyWebsocket from "@fastify/websocket";
 import { WebSocket } from "ws";
 interface ActiveConnection {
     socket: WebSocket;

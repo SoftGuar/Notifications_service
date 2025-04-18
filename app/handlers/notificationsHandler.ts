@@ -1,9 +1,8 @@
 import {notificationsService} from '../services/notificationsService';
-import { FastifyInstance } from 'fastify';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import {NotificationPayload} from '../services/types/payload';
 import { inAppChannelService } from '../services/inAppChannelService';
-import { sendNotification } from 'app/services/pushChannelService';
+import { sendNotification } from '../services/pushChannelService';
 import { emailNotificationsService } from '../services/emailNotificationsService';
 import { updateNotificationInput } from 'app/services/types/Notifications.types';
 

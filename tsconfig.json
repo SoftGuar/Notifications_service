@@ -6,7 +6,10 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "baseUrl": "./",
-    "strict": true
+    "strict": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["app/**/*.ts"]
 }
