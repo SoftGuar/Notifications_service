@@ -1,5 +1,5 @@
 import prisma from '../services/prismaService';
-import { createNotificationInput } from 'app/services/types/Notifications.types';
+import { createNotificationInput, updateNotificationInput } from 'app/services/types/Notifications.types';
 
 export const notificationsModel = {
   async getNotifications(userId: number) {
@@ -37,7 +37,7 @@ export const notificationsModel = {
         }
         }
     ,
-    async updateNotification(notificationId: number, updateData: any) {
+    async updateNotification(notificationId: number, updateData: updateNotificationInput) {
         try {
             const notification = await prisma.notification.update({
             where: { id: notificationId },
@@ -100,7 +100,7 @@ export const notificationsModel = {
         }
     }
     ,
-    async getNotificationsByType(userId: number, type: string) {
+    async getNotificationsByTypeAndUserId(userId: number, type: string) {
         try {
             const notifications = await prisma.notification.findMany({
             where: {

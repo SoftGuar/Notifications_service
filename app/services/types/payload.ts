@@ -2,7 +2,7 @@ export interface NotificationPayload {
     requestId: string;
     timestamp: string;
     notificationType: "transactional" | "promotional";
-    channels: Array<"email" | "sms" | "push" | "in-app">;
+    channels: Array<"email" | "push" | "in-app">;
     broadcast: boolean;
     recipient: Array<{
         userId: number;
