@@ -5,27 +5,7 @@ import { WebSocket } from "ws";
 
 
 export const inAppChannelService={
-    async sendNotification(notificationData:NotificationPayload ) {
-        try {
-            sendNotification(
-                notificationData,
-                activeConnections
-               );
-        } catch (error) {
-            console.error("Error sending in-app notification:", error);
-            throw new Error("Failed to send in-app notification");
-        }
-    },
-}
-
-
-interface ActiveConnection {
-    socket: WebSocket;
-    user_id?: number;
-    topics: string[];
-}
-
-const sendNotification= (notification: NotificationPayload, activeConnections: Map<string, ActiveConnection>) => {
+    async  sendNotification(notification: NotificationPayload) {
         const notificationMessage = JSON.stringify({
             type: "notification",
             data: notification,
@@ -38,7 +18,6 @@ const sendNotification= (notification: NotificationPayload, activeConnections: M
                 activeConnections.delete(connectionId);
                 return;
             }
-
             // Determine if this connection should receive the notification
             const shouldReceive = 
                 // If it's a broadcast notification, send to everyone
@@ -46,10 +25,8 @@ const sendNotification= (notification: NotificationPayload, activeConnections: M
                 // If no specific recipients or topics, send to everyone
                 (!notification.recipient?.length && !notification.notificationType) ||
                 // Check if any recipient matches the connection's user_id
-                notification.recipient?.some(recipient => connection.user_id === recipient.userId) ||
-                // Check if the notification type matches any of the connection's topics
-                (notification.notificationType && connection.topics.includes(notification.notificationType));
-
+                notification.recipient?.some(recipient => Number(connection.user_id) === Number(recipient.userId));
+            console.log(shouldReceive)
             if (shouldReceive) {
                 try {
                     console.log(`Sending notification to ${connectionId}:`, notificationMessage);
@@ -61,3 +38,5 @@ const sendNotification= (notification: NotificationPayload, activeConnections: M
             }
         });
     }
+}
+

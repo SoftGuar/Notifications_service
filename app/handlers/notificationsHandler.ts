@@ -28,11 +28,9 @@ export const notificationsHandler = {
                         await emailNotificationsService.sendEmail(notificationData);
                         break;
                     case 'push':
-                        console.log('Sending push notification:', notificationData);
                         await sendNotification(notificationData);
                         break;
                     case 'in-app':
-                        console.log('Sending in-app notification:', notificationData);
                         await inAppChannelService.sendNotification(notificationData);
                         break;
                 }

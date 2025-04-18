@@ -19,8 +19,13 @@ export const emailNotificationsService = {
         const mailOptions = {
             from: process.env.MAIL_USER,
             to: notification.recipient.map(r => r.email).join(', '),
-            subject: notification.message.pushNotification?.title,
-            text: notification.message.pushNotification?.body
+            subject: notification.message.subject,
+            html: notification.message.body,
+            attachments: notification.message.attachments?.map(attachment => ({
+                filename: attachment,
+                path: attachment
+            }))
+
         };
 
         try {
