@@ -1,6 +1,8 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
 import fastifyWebsocket from "@fastify/websocket";
 import {websocketRouteHandler} from "../handlers/websocketRouteHandler";
+import { inAppChannelService } from "../services/inAppChannelService";
+import { NotificationPayload } from "../services/types/payload";
 
 
 
@@ -10,6 +12,11 @@ export default async function websocketRoute(fastify: FastifyInstance) {
         Params: { user_id: number }
     }>) => {
         websocketRouteHandler(req, connection);
+    });
+    fastify.post("/ws/send-notification",(req:FastifyRequest<{
+        Body: NotificationPayload
+    }>) => {
+        inAppChannelService.sendNotification(req.body);
     });
 }
     

@@ -11,7 +11,6 @@ export const inAppChannelService={
             data: notification,
             timestamp: new Date().toISOString()
         });
-
         activeConnections.forEach((connection, connectionId) => {
             // Skip if connection is not open
             if (connection.socket.readyState !== WebSocket.OPEN) {

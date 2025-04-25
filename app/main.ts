@@ -3,6 +3,7 @@ import Fastify from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import registerRoutes from './routes';
+import cors from '@fastify/cors';
 import { checkDatabaseConnection, disconnectPrisma } from './services/prismaService';
 
 // Load environment variables
@@ -34,6 +35,11 @@ const fastify = Fastify({ logger: true });
  * @throws Will throw an error if the server fails to start.
  */
 async function startServer() {
+  fastify.register(cors, {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  });
   // Check database connection first
   await checkDatabaseConnection();
   fastify.register(registerRoutes);

@@ -1,10 +1,8 @@
 import {notificationsService} from '../services/notificationsService';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import {NotificationPayload} from '../services/types/payload';
-import { inAppChannelService } from '../services/inAppChannelService';
-import { sendNotification } from '../services/pushChannelService';
-import { emailNotificationsService } from '../services/emailNotificationsService';
 import { updateNotificationInput } from 'app/services/types/Notifications.types';
+import { notifyService } from '../services/notifyService';
 
 export const notificationsHandler = {
     async getNotifications(req: FastifyRequest<{ Params: { userId: number } }>, res: FastifyReply) {
@@ -20,22 +18,13 @@ export const notificationsHandler = {
 
     async createNotification(req: FastifyRequest<{ Body: NotificationPayload }>, res: FastifyReply) {
         try {
-            const notificationData = req.body; // Assuming notification data is sent in the request body
-            const notification = await notificationsService.createNotification(notificationData);
-            for (const channel of notificationData.channels) {
-                switch (channel) {
-                    case 'email':
-                        await emailNotificationsService.sendEmail(notificationData);
-                        break;
-                    case 'push':
-                        await sendNotification(notificationData);
-                        break;
-                    case 'in-app':
-                        await inAppChannelService.sendNotification(notificationData);
-                        break;
-                }
-            }
-            res.status(201).send(notification);
+            const rawData = JSON.parse(JSON.stringify(req.body));
+    console.log('Raw notification data:', rawData);
+    console.log(rawData.recipient)
+            const notificationData: NotificationPayload = req.body; 
+            console.log(notificationData);
+            await notifyService.notify(notificationData)
+            res.status(201).send(notificationData);
         } catch (error) {
             console.error('Error creating notification:', error);
             res.status(500).send({ error: 'Failed to create notification' });

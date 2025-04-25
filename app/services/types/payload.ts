@@ -1,7 +1,7 @@
 export interface NotificationPayload {
     requestId: string;
     timestamp: string;
-    notificationType: "transactional" | "promotional";
+    notificationType: string;
     channels: Array<"email" | "push" | "in-app">;
     broadcast: boolean;
     recipient: Array<{
@@ -12,7 +12,6 @@ export interface NotificationPayload {
         subject: string;
         body: string;
         attachments?: string[];
-        smsText?: string;
         pushNotification?: {
             title: string;
             body: string;
