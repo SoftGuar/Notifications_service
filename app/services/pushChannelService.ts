@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 require('dotenv').config();
 // Initialize Firebase Admin SDK
 import serviceAccount from './serviceAccountKey.json';
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: process.env.FIREBASE_DATABASE_URL
@@ -13,27 +14,21 @@ admin.initializeApp({
 // Register fastify plugins
 fastify.register(require('fastify-cors'));
 
-// In-memory store for device tokens (in production, use a database)
-const deviceTokens = new Map();
-
 // Register a device token
 export const registerToken = async (
         userId: number,
         token: string,
         deviceInfo?: object) => {
     try {
+        console.log('registerToken');
 
         if (!userId || !token) {
             throw new Error('Missing required parameters: userId and token');
         }
 
         // Store token with timestamp and device info
-        deviceTokens.set(userId, {
-            token,
-            deviceInfo: deviceInfo || {},
-            lastUpdated: new Date().toISOString()
-        });
-
+        await storeTokenInFirestore(userId, token, deviceInfo);
+        console.log('Token registered successfully');
         return { success: true, message: 'Token registered successfully' };
     } catch (error: any) {
        throw new Error(`Error registering token: ${error.message}`);
@@ -48,7 +43,7 @@ export const sendToUser= async (notification:NotificationPayload) => {
             throw new Error('Missing recipient userId');
                 }
 
-        const userDevice = deviceTokens.get(userId);
+        const userDevice = await getTokenFromFirestore(userId);
         if (!userDevice) {
             throw new Error('User token not found');
         }
@@ -89,7 +84,7 @@ export const sendToUsers= async (notification:NotificationPayload) => {
         }
 
         const tokens = userIds
-            .map(id => deviceTokens.get(id)?.token)
+            .map(id => getTokenFromFirestore(id))
             .filter(Boolean);
 
         if (tokens.length === 0) {
@@ -145,7 +140,7 @@ export const scheduleNotification= async (notification:NotificationPayload) => {
             throw new Error('Missing required push notification details or userId');
         }
 
-        const userDevice = deviceTokens.get(userId);
+        const userDevice = await getTokenFromFirestore(userId);
         if (!userDevice) {
             throw new Error('User token not found');
         }
@@ -212,6 +207,33 @@ export const sendNotification = async (notification: NotificationPayload) => {
         throw new Error(`Error sending notification: ${error.message}`);
     }
 }
+
+// Store token in Firestore
+const storeTokenInFirestore = async (userId: number, token: string, deviceInfo?: object) => {
+    try {
+      await admin.firestore().collection('deviceTokens').doc(userId.toString()).set({
+        token,
+        deviceInfo: deviceInfo || {},
+        lastUpdated: admin.firestore.FieldValue.serverTimestamp()
+      });
+      return { success: true };
+    } catch (error: any) {
+      throw new Error(`Error storing token: ${error.message}`);
+    }
+  };
+  
+  // Retrieve token from Firestore
+  const getTokenFromFirestore = async (userId: number) => {
+    try {
+      const doc = await admin.firestore().collection('deviceTokens').doc(userId.toString()).get();
+      if (!doc.exists) {
+        return null;
+      }
+      return doc.data();
+    } catch (error: any) {
+      throw new Error(`Error retrieving token: ${error.message}`);
+    }
+  };
 
 // // Send notifications to topics
 // fastify.post('/send-to-topic', async (request: FastifyRequest<{
