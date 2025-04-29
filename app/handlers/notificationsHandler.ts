@@ -3,12 +3,14 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import {NotificationPayload} from '../services/types/payload';
 import { updateNotificationInput } from 'app/services/types/Notifications.types';
 import { notifyService } from '../services/notifyService';
+import { UserType } from '@prisma/client';
 
 export const notificationsHandler = {
-    async getNotifications(req: FastifyRequest<{ Params: { userId: number } }>, res: FastifyReply) {
+    async getNotifications(req: FastifyRequest<{ Params: { userId: number, userType: UserType } }>, res: FastifyReply) {
         try {
-            const userId = req.params.userId; // Assuming userId is passed as a URL parameter
-            const notifications = await notificationsService.getNotifications(userId);
+            const userId = req.params.userId;
+            const userType = req.params.userType;
+            const notifications = await notificationsService.getNotifications(userId, userType);
             res.status(201).send(notifications);
         } catch (error) {
             console.error('Error fetching notifications:', error);

@@ -1,3 +1,5 @@
+import { UserType } from "@prisma/client";
+
 export interface NotificationPayload {
     requestId: string;
     timestamp: string;
@@ -6,6 +8,7 @@ export interface NotificationPayload {
     broadcast: boolean;
     recipient: Array<{
         userId: number;
+        userType: UserType;
         email: string;
     }>;
     message: {

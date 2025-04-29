@@ -4,8 +4,7 @@ import { routesSchemas } from './routesSchemas';
 
 export function registerNotificationRoutes(fastify: FastifyInstance){
     fastify.post('/notify', routesSchemas.createNotification, notificationsHandler.createNotification);
-    fastify.get('/notifications/:userId', routesSchemas.getNotifications , notificationsHandler.getNotifications);
-    fastify.get('/notifications/:userId/:type',  routesSchemas.getNotificationsByTypeAndUserId , notificationsHandler.getNotificationsByTypeAndUserId);
+    fastify.get('/notifications/:userId/:userType', routesSchemas.getNotifications , notificationsHandler.getNotifications);
     fastify.get('/notification/:notificationId',  routesSchemas.getNotificationById , notificationsHandler.getNotificationById);
     fastify.put('/notifications/:notificationId',  routesSchemas.updateNotification , notificationsHandler.updateNotification);
     fastify.put('/notifications/:notificationId/read',  routesSchemas.markNotificationAsRead , notificationsHandler.markNotificationAsRead);

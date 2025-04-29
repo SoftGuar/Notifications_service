@@ -1,12 +1,14 @@
+import { UserType } from '@prisma/client';
 import prisma from '../services/prismaService';
 import { createNotificationInput, updateNotificationInput } from 'app/services/types/Notifications.types';
 
 export const notificationsModel = {
-  async getNotifications(userId: number) {
+  async getNotifications(userId: number, userType: UserType) {
     try {
       const notifications = await prisma.notification.findMany({
         where: {
-          user_id: userId,
+        user_id: userId,
+        user_type: userType,
         },
       });
       return notifications;
@@ -21,6 +23,7 @@ export const notificationsModel = {
             const notification = await prisma.notification.create({
             data: {
                 user_id: notificationData.user_id,
+                user_type: notificationData.user_type,
                 title: notificationData.title,
                 message: notificationData.message,
                 is_read: notificationData.read,

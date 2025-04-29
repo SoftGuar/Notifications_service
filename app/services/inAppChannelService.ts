@@ -24,7 +24,8 @@ export const inAppChannelService={
                 // If no specific recipients or topics, send to everyone
                 (!notification.recipient?.length && !notification.notificationType) ||
                 // Check if any recipient matches the connection's user_id
-                notification.recipient?.some(recipient => Number(connection.user_id) === Number(recipient.userId));
+                notification.recipient?.some(recipient => Number(connection.user_id) === Number(recipient.userId) && 
+                (connection.user_type === recipient.userType));
             console.log(shouldReceive)
             if (shouldReceive) {
                 try {

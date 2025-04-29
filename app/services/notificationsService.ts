@@ -1,11 +1,12 @@
+import { UserType } from "@prisma/client";
 import { notificationsModel } from "../models/notificationsModel";
 import { createNotificationInput, updateNotificationInput } from "./types/Notifications.types";
 import { NotificationPayload } from "./types/payload";
 
 export const notificationsService = {
-    async getNotifications(userId: number) {
+    async getNotifications(userId: number,userType: UserType) {
         try {
-        const notifications = await notificationsModel.getNotifications(userId);
+        const notifications = await notificationsModel.getNotifications(userId, userType);
         return notifications;
         } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -27,6 +28,7 @@ export const notificationsService = {
 
                 const createNotificationInput :createNotificationInput = {
                     user_id: recipient?.userId,
+                    user_type: recipient?.userType,
                     title: notificationData.message.pushNotification?.title || "New Notification",
                     message: notificationData.message.pushNotification?.body || notificationData.message.body,
                     read: false,

@@ -8,8 +8,9 @@ export const routesSchemas = {
             type: 'object',
             properties: {
                 userId: { type: 'number' },
+                userType: { type: 'string' },
             },
-            required: ['userId'],
+            required: ['userId', 'userType'],
         },
     }
     },
@@ -137,11 +138,15 @@ export const routesSchemas = {
                 description: 'Recipients of the notification (empty if broadcast is true)',
                 items: { 
                   type: 'object',
-                  required: ['userId', 'email'],
+                  required: ['userId', 'userType', 'email'],
                   properties: {
                     userId: { 
                       type: 'integer',
                       description: 'User ID of the recipient' 
+                    },
+                    userType: { 
+                      type: 'string',
+                      description: 'Type of user (e.g., admin, customer)' 
                     },
                     email: { 
                       type: 'string',
