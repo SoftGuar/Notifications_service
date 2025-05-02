@@ -109,7 +109,7 @@ export const routesSchemas = {
             required: ['requestId', 'timestamp', 'notificationType', 'channels', 'broadcast', 'recipient', 'message'],
             properties: {
               requestId: { 
-                type: 'string', 
+                type: 'number', 
                 description: 'Unique identifier for the notification request' 
               },
               timestamp: { 

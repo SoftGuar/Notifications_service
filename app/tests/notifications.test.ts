@@ -3,6 +3,7 @@ import { notificationsService } from "../services/notificationsService";
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import { notificationsModel } from "../models/notificationsModel";
 import { updateNotificationInput } from "../services/types/Notifications.types";
+import { UserType } from "@prisma/client";
 
 // Mock the notifications model to avoid actual database operations
 jest.mock('../models/notificationsModel');
@@ -16,12 +17,15 @@ describe('Notifications Service Tests', () => {
     // Create notification tests
     it('should create a basic email notification', async () => {
         const notification: NotificationPayload = {
-            requestId: "123",
+            requestId: 123,
             timestamp: new Date().toISOString(),
             notificationType: "email",
             channels: ["email"],    
             broadcast: false,
-            recipient: [{ userId: 1, email: "test@test.com" }],
+            recipient: [{
+                userId: 1, email: "test@test.com",
+                userType: "USER"
+            }],
             message: {
                 subject: "Hello, world!",
                 body: "Hello, world!",
@@ -40,12 +44,12 @@ describe('Notifications Service Tests', () => {
 
     it('should create a push notification with custom data', async () => {
         const notification: NotificationPayload = {
-            requestId: "124",
+            requestId: 124,
             timestamp: new Date().toISOString(),
             notificationType: "push",
             channels: ["push"],
             broadcast: false,
-            recipient: [{ userId: 2, email: "user2@test.com" }],
+            recipient: [{ userId: 2, email: "user2@test.com", userType: "USER" }],
             message: {
                 subject: "Push Test",
                 body: "Test push notification",
@@ -71,12 +75,12 @@ describe('Notifications Service Tests', () => {
 
     it('should create a multi-channel notification', async () => {
         const notification: NotificationPayload = {
-            requestId: "125",
+            requestId: 125,
             timestamp: new Date().toISOString(),
             notificationType: "mixed",
             channels: ["email", "push", "in-app"],
             broadcast: false,
-            recipient: [{ userId: 3, email: "user3@test.com" }],
+            recipient: [{ userId: 3, email: "user3@test.com", userType: "USER" }],
             message: {
                 subject: "Multi-channel Test",
                 body: "Test all channels",
@@ -97,15 +101,15 @@ describe('Notifications Service Tests', () => {
 
     it('should handle broadcast notifications', async () => {
         const notification: NotificationPayload = {
-            requestId: "126",
+            requestId: 126,
             timestamp: new Date().toISOString(),
             notificationType: "broadcast",
             channels: ["email"],
             broadcast: true,
             recipient: [
-                { userId: 1, email: "user1@test.com" },
-                { userId: 2, email: "user2@test.com" },
-                { userId: 3, email: "user3@test.com" }
+                { userId: 1, email: "user1@test.com", userType: "USER" },
+                { userId: 2, email: "user2@test.com", userType: "USER" },
+                { userId: 3, email: "user3@test.com", userType: "USER" }
             ],
             message: {
                 subject: "Broadcast Test",
@@ -123,12 +127,12 @@ describe('Notifications Service Tests', () => {
 
     it('should handle scheduled notifications', async () => {
         const notification: NotificationPayload = {
-            requestId: "127",
+            requestId: 127,
             timestamp: new Date().toISOString(),
             notificationType: "scheduled",
             channels: ["email"],
             broadcast: false,
-            recipient: [{ userId: 4, email: "user4@test.com" }],
+            recipient: [{ userId: 4, email: "user4@test.com", userType: "USER" }],
             message: {
                 subject: "Scheduled Test",
                 body: "Test scheduled message"
@@ -164,6 +168,7 @@ describe('Notifications Service Tests', () => {
                 { 
                     id: 1, 
                     user_id: 3, 
+                    user_type: UserType.USER,
                     title: 'Test 1', 
                     message: 'Message 1',
                     type: 'email',
@@ -176,6 +181,7 @@ describe('Notifications Service Tests', () => {
                 { 
                     id: 2, 
                     user_id: 3, 
+                    user_type: UserType.USER,
                     title: 'Test 2', 
                     message: 'Message 2',
                     type: 'email',
@@ -190,15 +196,16 @@ describe('Notifications Service Tests', () => {
             const mockGetNotifications = notificationsModel.getNotifications as jest.MockedFunction<typeof notificationsModel.getNotifications>;
             mockGetNotifications.mockResolvedValue(mockNotifications);
             
-            const notifications = await notificationsService.getNotifications(3);
+            const notifications = await notificationsService.getNotifications(3, UserType.USER);
             expect(notifications).toEqual(mockNotifications);
-            expect(notificationsModel.getNotifications).toHaveBeenCalledWith(3);
+            expect(notificationsModel.getNotifications).toHaveBeenCalledWith(3, UserType.USER);
         });
         
         it('should get notification by id', async () => {
             const mockNotification = {
                 id: 1, 
                 user_id: 3, 
+                user_type: UserType.USER,
                 title: 'Test 1', 
                 message: 'Message 1',
                 type: 'email',
@@ -206,7 +213,7 @@ describe('Notifications Service Tests', () => {
                 is_read: false,
                 created_at: new Date(),
                 sent_at: new Date(),
-                read_at: null
+                read_at: null,
             };
             
             const mockGetNotificationById = notificationsModel.getNotificationById as jest.MockedFunction<typeof notificationsModel.getNotificationById>;
@@ -222,6 +229,7 @@ describe('Notifications Service Tests', () => {
                 { 
                     id: 1, 
                     user_id: 3, 
+                    user_type: UserType.USER,
                     title: 'Test 1', 
                     message: 'Message 1',
                     type: 'email',
@@ -254,6 +262,7 @@ describe('Notifications Service Tests', () => {
             const mockUpdatedNotification = {
                 id: 1,
                 user_id: 3,
+                user_type: UserType.USER,
                 title: 'Updated Title',
                 message: 'Updated Message',
                 type: 'email',
@@ -279,6 +288,7 @@ describe('Notifications Service Tests', () => {
             const mockDeletedNotification = {
                 id: 1,
                 user_id: 3,
+                user_type: UserType.USER,
                 title: 'Deleted Notification',
                 message: 'This notification was deleted',
                 type: 'email',
@@ -304,6 +314,7 @@ describe('Notifications Service Tests', () => {
             const mockReadNotification = {
                 id: 1,
                 user_id: 3,
+                user_type: UserType.USER,
                 title: 'Read Notification',
                 message: 'This notification is read',
                 type: 'email',
@@ -326,6 +337,7 @@ describe('Notifications Service Tests', () => {
             const mockUnreadNotification = {
                 id: 1,
                 user_id: 3,
+                user_type: UserType.USER,
                 title: 'Unread Notification',
                 message: 'This notification is unread',
                 type: 'email',
@@ -351,18 +363,18 @@ describe('Notifications Service Tests', () => {
             const mockGetNotifications = notificationsModel.getNotifications as jest.MockedFunction<typeof notificationsModel.getNotifications>;
             mockGetNotifications.mockRejectedValue(new Error('Database error'));
             
-            await expect(notificationsService.getNotifications(1))
+            await expect(notificationsService.getNotifications(1, UserType.USER))
                 .rejects.toThrow('Failed to fetch notifications');
         });
         
         it('should handle errors when creating notifications', async () => {
             const notification: NotificationPayload = {
-                requestId: "123",
+                requestId: 123,
                 timestamp: new Date().toISOString(),
                 notificationType: "email",
                 channels: ["email"],
                 broadcast: false,
-                recipient: [{ userId: 1, email: "test@test.com" }],
+                recipient: [{ userId: 1, userType: UserType.USER, email: "test@test.com" }],
                 message: {
                     subject: "Test Subject",
                     body: "Test Body"
