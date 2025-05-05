@@ -80,18 +80,31 @@ export const sendToUser = async (notification: NotificationPayload) => {
 
     const device = await getTokenFromFirestore(userId, userType);
     if (!device?.token) throw new Error('Device token not found');
+    
     const pushNotification = notification.message.pushNotification;
-        if (!pushNotification?.title || !pushNotification?.body) {
-            throw new Error('Missing required push notification details');
-        }
+    if (!pushNotification?.title || !pushNotification?.body) {
+        throw new Error('Missing required push notification details');
+    }
+
+    // Convert all data values to strings
+    const stringifiedData: Record<string, string> = {};
+    if (notification.message) {
+        Object.entries(notification.message).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                stringifiedData[key] = typeof value === 'object' 
+                    ? JSON.stringify(value) 
+                    : String(value);
+            }
+        });
+    }
+
     const message = {
         notification: {
             title: pushNotification.title,
             body: pushNotification.body,
-            icon: pushNotification.icon
         },
         data: {
-            ...notification.message,
+            ...stringifiedData,
             actionType: pushNotification.action?.type || '',
             actionUrl: pushNotification.action?.url || ''
         },
@@ -113,18 +126,31 @@ export const sendToUsers = async (notification: NotificationPayload) => {
     if (tokens.length === 0) {
         throw new Error('No valid tokens found');
     }
+    
     const pushNotification = notification.message.pushNotification;
-        if (!pushNotification?.title || !pushNotification?.body) {
-            throw new Error('Missing required push notification details');
-        }
+    if (!pushNotification?.title || !pushNotification?.body) {
+        throw new Error('Missing required push notification details');
+    }
+
+    // Convert all data values to strings
+    const stringifiedData: Record<string, string> = {};
+    if (notification.message) {
+        Object.entries(notification.message).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                stringifiedData[key] = typeof value === 'object' 
+                    ? JSON.stringify(value) 
+                    : String(value);
+            }
+        });
+    }
+
     const message = {
         notification: {
             title: pushNotification.title,
             body: pushNotification.body,
-            icon: pushNotification.icon
         },
         data: {
-            ...notification.message,
+            ...stringifiedData,
             actionType: pushNotification.action?.type || '',
             actionUrl: pushNotification.action?.url || ''
         },
