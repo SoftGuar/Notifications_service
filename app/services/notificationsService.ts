@@ -29,7 +29,7 @@ export const notificationsService = {
                 const createNotificationInput :createNotificationInput = {
                     user_id: recipient?.userId,
                     user_type: recipient?.userType,
-                    title: notificationData.message.pushNotification?.title || "New Notification",
+                    title: notificationData.message.pushNotification?.title ||notificationData.message.subject|| "New Notification",
                     message: notificationData.message.pushNotification?.body || notificationData.message.body,
                     read: false,
                     type: notificationData.notificationType, 
