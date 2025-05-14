@@ -14,21 +14,6 @@ export const routesSchemas = {
         },
     }
     },
-    getNotificationsByTypeAndUserId: {
-        schema:{
-        summary: 'Get notifications for a user by type and user ID',
-        description: 'Get notifications for a user by type and user ID',
-        tags: ['notifications'],
-        params: {
-            type: 'object',
-            properties: {
-                userId: { type: 'number' },
-                type: { type: 'string' },
-            },
-            required: ['userId', 'type'],
-        },
-    }
-    },
     getNotificationById: {
         schema:{
         summary: 'Get a notification by ID',

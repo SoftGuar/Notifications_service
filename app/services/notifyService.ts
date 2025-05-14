@@ -5,7 +5,6 @@ import { NotificationPayload } from "./types/payload";
 
 export const notifyService = {
     async notify(notification: NotificationPayload) {
-        //databse storage
         await notificationsService.createNotification(notification);
         for (const channel of notification.channels) {
             switch (channel) {
