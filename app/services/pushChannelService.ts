@@ -16,6 +16,8 @@ admin.initializeApp({
 fastify.register(require('fastify-cors'));
 
 // --- Helper Functions ---
+const getCompositeId = (userId: number, userType: string) => `${userId}_${userType}`;
+
 const storeTokenInFirestore = async (
     userId: number,
     userType: string,
@@ -23,7 +25,8 @@ const storeTokenInFirestore = async (
     deviceInfo?: object
 ) => {
     try {
-        await admin.firestore().collection('deviceTokens').doc(userId.toString()).set({
+        const docId = getCompositeId(userId, userType);
+        await admin.firestore().collection('deviceTokens').doc(docId).set({
             token,
             userType,
             deviceInfo: deviceInfo || {},
@@ -34,23 +37,24 @@ const storeTokenInFirestore = async (
     }
 };
 
+
 const getTokenFromFirestore = async (
     userId: number,
     userType: string
 ) => {
     try {
-        const doc = await admin.firestore().collection('deviceTokens')
-            .doc(userId.toString())
-            .get();
+        const docId = getCompositeId(userId, userType);
+        const doc = await admin.firestore().collection('deviceTokens').doc(docId).get();
 
         if (!doc.exists) return null;
-        
-        const data = doc.data();
-        return data;
+
+        return doc.data()?.token ?? null;
     } catch (error: any) {
         throw new Error(`Firestore error: ${error.message}`);
     }
 };
+
+
 
 // --- Core Functions ---
 export const registerToken = async (
@@ -75,7 +79,7 @@ export const sendToUser = async (notification: NotificationPayload) => {
     }
 
     const device = await getTokenFromFirestore(userId, userType);
-    if (!device?.token) throw new Error('Device token not found');
+    if (!device) throw new Error('Device token not found');
     
     const pushNotification = notification.message.pushNotification;
     if (!pushNotification?.title || !pushNotification?.body) {
@@ -104,7 +108,7 @@ export const sendToUser = async (notification: NotificationPayload) => {
             actionType: pushNotification.action?.type || '',
             actionUrl: pushNotification.action?.url || ''
         },
-        token: device.token
+        token: device
     };
 
     return await admin.messaging().send(message);
@@ -116,7 +120,7 @@ export const sendToUsers = async (notification: NotificationPayload) => {
     // Batch fetch tokens
     for (const recipient of notification.recipient) {
         const device = await getTokenFromFirestore(recipient.userId, recipient.userType);
-        if (device?.token) tokens.push(device.token);
+        if (device) tokens.push(device);
     }
 
     if (tokens.length === 0) {
