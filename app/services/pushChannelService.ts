@@ -46,10 +46,6 @@ const getTokenFromFirestore = async (
         if (!doc.exists) return null;
         
         const data = doc.data();
-        // Optional: Verify userType matches if needed
-        if (data?.userType !== userType) {
-            fastify.log.warn(`UserType mismatch for userId ${userId}`);
-        }
         return data;
     } catch (error: any) {
         throw new Error(`Firestore error: ${error.message}`);
