@@ -154,10 +154,17 @@ export const sendToUsers = async (notification: NotificationPayload) => {
             actionType: pushNotification.action?.type || '',
             actionUrl: pushNotification.action?.url || ''
         },
-        tokens
+        token: "" // Token will be set per message
     };
-
-    return await admin.messaging().sendMulticast(message);
+    for (const token of tokens) {
+        try {
+            message.token = token; // Set the token for each message
+            await admin.messaging().send(message);
+        } catch (error) {
+            fastify.log.error(`Failed to send notification to token ${token}: ${error}`);
+        }
+    }
+    return { success: true, sentTo: tokens.length };
 };
 
 export const scheduleNotification = async (notification: NotificationPayload) => {
